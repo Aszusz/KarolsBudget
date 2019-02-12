@@ -12,28 +12,29 @@ namespace KarolsBudget
             _dateProvider = dateProvider;
         }
 
-        public int GetPastDays(Budget budget)
+        public int GetNumberOfPastDays(Budget budget)
         {
             return _dateProvider.Today() > budget.Start
                 ? (int) (_dateProvider.Today() - budget.Start).TotalDays
                 : 0;
         }
 
-        public int GetPresentDays(Budget budget)
-        {
-            return _dateProvider.Today() >= budget.Start && _dateProvider.Today() <= budget.End ? 1 : 0;
-        }
-
-        public int GetFutureDays(Budget budget)
+        public int GetNumberOfRemainingDays(Budget budget)
         {
             return _dateProvider.Today() < budget.End
                 ? (int) (budget.End - _dateProvider.Today()).TotalDays
                 : 0;
         }
 
-        public int GetTotalDays(Budget budget)
+        public int GetNumberOfTotalDays(Budget budget)
         {
             return (int) (budget.End - budget.Start).TotalDays + 1;
+        }
+
+        public bool IsTodayInBudgetScope(Budget budget)
+        {
+            return _dateProvider.Today() >= budget.Start &&
+                   _dateProvider.Today() <= budget.End;
         }
 
         public IEnumerable<Expense> GetPastExpenses(Budget budget)
@@ -56,40 +57,29 @@ namespace KarolsBudget
             return GetTodaysExpenses(budget).Sum(expense => expense.Amount);
         }
 
-        private double CalculateBalance(Budget budget)
-        {
-            var howMuchIWasAllowedSpend = GetPastDays(budget) * budget.Amount / GetTotalDays(budget);
-            var howMuchIDidActuallySpend = SumPastExpenses(budget);
-            return howMuchIWasAllowedSpend - howMuchIDidActuallySpend;
-        }
-
         public double CalculateSavings(Budget budget)
         {
-            var balance = CalculateBalance(budget);
+            var howMuchIWasAllowedToSpend = GetNumberOfPastDays(budget) * budget.Amount / GetNumberOfTotalDays(budget);
+            var howMuchIDidActuallySpend = SumPastExpenses(budget);
+            var balance = howMuchIWasAllowedToSpend - howMuchIDidActuallySpend;
             return balance > 0 ? balance : 0;
+        }
+
+        public double CalculateCurrentBudget(Budget budget)
+        {
+            return budget.Amount - CalculateSavings(budget) - SumPastExpenses(budget);
         }
 
         public double CalculateTodaysAllowance(Budget budget)
         {
-            if (GetPresentDays(budget) == 0) return 0.0;
+            if (!IsTodayInBudgetScope(budget)) return 0.0;
 
-            var howMuchMoneyShouldBeLeftToday =
-                (GetFutureDays(budget) + GetPresentDays(budget))
-                *budget.Amount/GetTotalDays(budget);
-            var balance = CalculateBalance(budget);
-            var howMuchMoneyIsActuallyLeftToday = balance < 0
-                ? howMuchMoneyShouldBeLeftToday + balance
-                : howMuchMoneyShouldBeLeftToday;
-
-            return howMuchMoneyIsActuallyLeftToday/(GetPresentDays(budget) + GetFutureDays(budget));
+            return CalculateCurrentBudget(budget)/(GetNumberOfRemainingDays(budget) + 1);
         }
 
         public double CalculateRemainingBudget(Budget budget)
         {
-            return budget.Amount 
-                - SumPastExpenses(budget) 
-                - CalculateSavings(budget) 
-                - CalculateTodaysAllowance(budget);
+            return CalculateCurrentBudget(budget) - CalculateTodaysAllowance(budget);
         }
     }
 }

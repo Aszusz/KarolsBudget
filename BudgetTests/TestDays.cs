@@ -27,10 +27,10 @@ namespace BudgetTests
         {
             _dateProvider.SetToday(new DateTime(2019, 01, 31));
 
-            Assert.That(_budgetService.GetPastDays(_budget), Is.EqualTo(0));
-            Assert.That(_budgetService.GetPresentDays(_budget), Is.EqualTo(0));
-            Assert.That(_budgetService.GetFutureDays(_budget), Is.EqualTo(3));
-            Assert.That(_budgetService.GetTotalDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.GetNumberOfPastDays(_budget), Is.EqualTo(0));
+            Assert.That(_budgetService.GetNumberOfRemainingDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.GetNumberOfTotalDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.IsTodayInBudgetScope(_budget), Is.EqualTo(false));
         }
 
         [Test]
@@ -38,10 +38,10 @@ namespace BudgetTests
         {
             _dateProvider.SetToday(new DateTime(2019, 02, 01));
 
-            Assert.That(_budgetService.GetPastDays(_budget), Is.EqualTo(0));
-            Assert.That(_budgetService.GetPresentDays(_budget), Is.EqualTo(1));
-            Assert.That(_budgetService.GetFutureDays(_budget), Is.EqualTo(2));
-            Assert.That(_budgetService.GetTotalDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.GetNumberOfPastDays(_budget), Is.EqualTo(0));
+            Assert.That(_budgetService.GetNumberOfRemainingDays(_budget), Is.EqualTo(2));
+            Assert.That(_budgetService.GetNumberOfTotalDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.IsTodayInBudgetScope(_budget), Is.EqualTo(true));
         }
 
         [Test]
@@ -49,10 +49,10 @@ namespace BudgetTests
         {
             _dateProvider.SetToday(new DateTime(2019, 02, 02));
 
-            Assert.That(_budgetService.GetPastDays(_budget), Is.EqualTo(1));
-            Assert.That(_budgetService.GetPresentDays(_budget), Is.EqualTo(1));
-            Assert.That(_budgetService.GetFutureDays(_budget), Is.EqualTo(1));
-            Assert.That(_budgetService.GetTotalDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.GetNumberOfPastDays(_budget), Is.EqualTo(1));
+            Assert.That(_budgetService.GetNumberOfRemainingDays(_budget), Is.EqualTo(1));
+            Assert.That(_budgetService.GetNumberOfTotalDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.IsTodayInBudgetScope(_budget), Is.EqualTo(true));
         }
 
         [Test]
@@ -60,10 +60,10 @@ namespace BudgetTests
         {
             _dateProvider.SetToday(new DateTime(2019, 02, 03));
 
-            Assert.That(_budgetService.GetPastDays(_budget), Is.EqualTo(2));
-            Assert.That(_budgetService.GetPresentDays(_budget), Is.EqualTo(1));
-            Assert.That(_budgetService.GetFutureDays(_budget), Is.EqualTo(0));
-            Assert.That(_budgetService.GetTotalDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.GetNumberOfPastDays(_budget), Is.EqualTo(2));
+            Assert.That(_budgetService.GetNumberOfRemainingDays(_budget), Is.EqualTo(0));
+            Assert.That(_budgetService.GetNumberOfTotalDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.IsTodayInBudgetScope(_budget), Is.EqualTo(true));
         }
 
         [Test]
@@ -71,10 +71,10 @@ namespace BudgetTests
         {
             _dateProvider.SetToday(new DateTime(2019, 02, 04));
 
-            Assert.That(_budgetService.GetPastDays(_budget), Is.EqualTo(3));
-            Assert.That(_budgetService.GetPresentDays(_budget), Is.EqualTo(0));
-            Assert.That(_budgetService.GetFutureDays(_budget), Is.EqualTo(0));
-            Assert.That(_budgetService.GetTotalDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.GetNumberOfPastDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.GetNumberOfRemainingDays(_budget), Is.EqualTo(0));
+            Assert.That(_budgetService.GetNumberOfTotalDays(_budget), Is.EqualTo(3));
+            Assert.That(_budgetService.IsTodayInBudgetScope(_budget), Is.EqualTo(false));
         }
     }
 }

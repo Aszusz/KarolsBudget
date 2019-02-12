@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="TestBudgetLeft.cs" />
     <Compile Include="TestAllowance.cs" />
+    <Compile Include="TestDateProvider.cs" />
     <Compile Include="TestSavings.cs" />
     <Compile Include="TestDays.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
