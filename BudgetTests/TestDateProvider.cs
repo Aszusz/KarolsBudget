@@ -1,6 +1,7 @@
 ﻿using System;
+using KarolsBudget;
 
-namespace KarolsBudget
+namespace BudgetTests
 {
     public class TestDateProvider : IDateProvider
     {
